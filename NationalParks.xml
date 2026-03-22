@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NationalParks>
+<NationalPark>   <!-- ERROR 1: Wrong root -->
+
+  <!-- Grand Canyon -->
   <NationalPark Rating="4.9">
     <Name>Grand Canyon</Name>
     <Phone>928-638-7496</Phone>
@@ -13,10 +15,12 @@
       <Zip>86023</Zip>
     </Address>
   </NationalPark>
+
+  <!-- Yellowstone -->
   <NationalPark Rating="4.8">
     <Name>Yellowstone</Name>
     <Phone>307-344-7381</Phone>
-    <Address NearestAirport="Bozeman">
+    <Address>   <!-- no NearestAirport= -->
       <Number>1</Number>
       <Street>Yellowstone National Park Road</Street>
       <City>Yellowstone National Park</City>
@@ -24,10 +28,11 @@
       <Zip>82190</Zip>
     </Address>
   </NationalPark>
+
+  <!-- Yosemite  -->
   <NationalPark>
     <Name>Yosemite</Name>
-    <Phone>209-372-0200</Phone>
-    <Phone>888-327-0000</Phone>
+    <!-- NO <Phone> here -->
     <Address NearestAirport="Fresno">
       <Number>1</Number>
       <Street>Old Big Oak Flat Road</Street>
@@ -36,6 +41,8 @@
       <Zip>95389</Zip>
     </Address>
   </NationalPark>
+
+  <!-- Zion  -->
   <NationalPark Rating="4.7">
     <Name>Zion</Name>
     <Phone>435-772-3256</Phone>
@@ -45,10 +52,13 @@
       <City>Springdale</City>
       <State>UT</State>
       <Zip>84767</Zip>
-    </Address>
+      <!-- NO </Address> - intentionally broken -->
   </NationalPark>
+
+  <!-- Rocky Mountain  -->
   <NationalPark>
     <Name>Rocky Mountain</Name>
+    <Name>Rocky Mountain National Park</Name>
     <Phone>970-586-1206</Phone>
     <Address NearestAirport="Denver">
       <Number>1</Number>
@@ -58,6 +68,8 @@
       <Zip>80517</Zip>
     </Address>
   </NationalPark>
+
+  <!-- Rest of parks  -->
   <NationalPark Rating="4.9">
     <Name>Great Smoky Mountains</Name>
     <Phone>865-436-1200</Phone>
@@ -70,6 +82,7 @@
       <Zip>37738</Zip>
     </Address>
   </NationalPark>
+
   <NationalPark>
     <Name>Acadia</Name>
     <Phone>207-288-3338</Phone>
@@ -81,6 +94,7 @@
       <Zip>04609</Zip>
     </Address>
   </NationalPark>
+
   <NationalPark Rating="4.6">
     <Name>Olympic</Name>
     <Phone>360-565-3130</Phone>
@@ -92,6 +106,7 @@
       <Zip>98362</Zip>
     </Address>
   </NationalPark>
+
   <NationalPark>
     <Name>Glacier</Name>
     <Phone>406-888-7800</Phone>
@@ -103,6 +118,7 @@
       <Zip>59936</Zip>
     </Address>
   </NationalPark>
+
   <NationalPark Rating="4.5">
     <Name>Bryce Canyon</Name>
     <Phone>435-834-5322</Phone>
@@ -115,4 +131,5 @@
       <Zip>84764</Zip>
     </Address>
   </NationalPark>
-</NationalParks>
+
+</NationalPark>

@@ -3,19 +3,20 @@ using System.Xml.Schema;
 using System.Xml;
 using Newtonsoft.Json;
 using System.IO;
+using System.Net;
 
-
-// ASU CSE445 Assignment 4
 namespace ConsoleApp1
 {
     public class Submission
     {
-        public static string xmlURL = "PASTE YOUR XML URL HERE";
-        public static string xmlErrorURL = "PASTE YOUR ERROR XML URL HERE";
-        public static string xsdURL = "PASTE YOUR XSD URL HERE";
+        public static string xmlURL = "https://stjense5.github.io/cse445-assignment4/NationalParks.xml";
+        public static string xmlErrorURL = "https://stjense5.github.io/cse445-assignment4/NationalParksErrors.xml";
+        public static string xsdURL = "https://stjense5.github.io/cse445-assignment4/NationalParks.xsd";
 
         public static void Main(string[] args)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+
             string result = Verification(xmlURL, xsdURL);
             Console.WriteLine(result);
 
@@ -26,30 +27,40 @@ namespace ConsoleApp1
             Console.WriteLine(result);
         }
 
-        // Q2.1
         public static string Verification(string xmlUrl, string xsdUrl)
         {
+            string errorMessages = "";
             try
             {
                 string xmlContent = DownloadContent(xmlUrl);
-                string xsdContent = DownloadContent(xsdUrl);
 
                 XmlSchemaSet schemas = new XmlSchemaSet();
-                schemas.Add("", XmlReader.Create(new StringReader(xsdContent)));
+                schemas.Add(null, xsdUrl);
 
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(xmlContent);
-
-                doc.Schemas = schemas;
-
-                string validationMessage = "No Error";
-
-                doc.Validate((sender, e) =>
+                XmlReaderSettings settings = new XmlReaderSettings
                 {
-                    validationMessage = e.Message;
-                });
+                    ValidationType = ValidationType.Schema,
+                    Schemas = schemas
+                };
 
-                return validationMessage;
+                settings.ValidationEventHandler += (sender, e) =>
+                {
+                    errorMessages += e.Message + "\n";
+                };
+
+                using (XmlReader reader = XmlReader.Create(new StringReader(xmlContent), settings))
+                {
+                    while (reader.Read()) { }
+                }
+
+                if (string.IsNullOrEmpty(errorMessages.Trim()))
+                    return "No errors are found";
+                else
+                    return errorMessages.Trim();
+            }
+            catch (XmlException ex)
+            {
+                return "XML Structure Error: " + ex.Message;
             }
             catch (Exception ex)
             {
@@ -59,27 +70,15 @@ namespace ConsoleApp1
 
         public static string Xml2Json(string xmlUrl)
         {
-            try
-            {
-                string xmlContent = DownloadContent(xmlUrl);
-
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(xmlContent);
-
-                string jsonText = JsonConvert.SerializeXmlNode(doc);
-
-                return jsonText;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
+            string xmlContent = DownloadContent(xmlUrl);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xmlContent);
+            return JsonConvert.SerializeXmlNode(doc);
         }
 
-        // Helper method
         private static string DownloadContent(string url)
         {
-            using (System.Net.WebClient client = new System.Net.WebClient())
+            using (WebClient client = new WebClient())
             {
                 return client.DownloadString(url);
             }
